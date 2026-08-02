@@ -76,3 +76,7 @@ footer a { color: var(--pink); }
   to { transform: translateY(105vh) rotate(720deg); opacity: .2; }
 }
 @media (max-width: 640px) { .scroll-col { width: 18%; } }
+
+/* Native dropdown options render on the OS's light panel — force dark/light
+   explicitly so it's never white-on-white (Bill, first review). */
+select option { background: #241132; color: #f6ecf4; }
