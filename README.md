@@ -2,7 +2,7 @@
 
 **Free giveaway picker for any live MyPrize room. No signup. No setup. No install.**
 
-Open the page → pick your live room from the dropdown → entries collect
+Open the page → pick your live room (say, SlothHopper mid-stream) from the dropdown → entries collect
 automatically from play-along rounds → draw a winner with a big-screen
 animation. That's the whole thing.
 
