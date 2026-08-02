@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Play-Along Live — free MyPrize giveaway picker</title>
+<meta name="description" content="Free play-along giveaway picker for any live MyPrize room. No signup, no setup, no install — pick a room, watch entries roll in, draw a winner.">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <h1>🎰 Play-Along <span class="accent">Live</span></h1>
+  <p class="tagline">Free giveaway picker for any live MyPrize room. No signup. No setup. Just pick your room.</p>
+</header>
+
+<main>
+  <!-- Step 1: pick a live room (no typing — Bill's rule) -->
+  <section id="room-step" class="card">
+    <h2>1 · Pick your live room</h2>
+    <div class="row">
+      <select id="room-select" disabled>
+        <option>Loading live rooms…</option>
+      </select>
+      <button id="room-refresh" class="ghost" title="Refresh live rooms">↻</button>
+    </div>
+    <div id="room-preview" class="room-preview hidden"></div>
+  </section>
+
+  <!-- Step 2: entries accumulate from live play-along rounds -->
+  <section id="track-step" class="card hidden">
+    <h2>2 · Entries <span id="entry-status" class="status"></span></h2>
+    <div class="row">
+      <button id="track-toggle" class="primary">▶ Start collecting entries</button>
+      <label class="toggle"><input type="checkbox" id="weighted-toggle" checked> weight by rounds played</label>
+      <button id="reset-entries" class="ghost">Reset</button>
+    </div>
+    <div class="stats-row">
+      <div class="stat"><div class="stat-num" id="stat-rounds">0</div><div class="stat-label">rounds seen</div></div>
+      <div class="stat"><div class="stat-num" id="stat-players">0</div><div class="stat-label">players</div></div>
+      <div class="stat"><div class="stat-num" id="stat-entries">0</div><div class="stat-label">total entries</div></div>
+    </div>
+    <ul id="roster"></ul>
+    <p class="fineprint">Entries come from MyPrize's public play-along round data — every player in a
+    completed round earns an entry. Public data can't split entries by currency (SC/GC), so this counts
+    participation in any currency.</p>
+  </section>
+
+  <!-- Step 3: the draw -->
+  <section id="draw-step" class="card hidden">
+    <h2>3 · Draw a winner</h2>
+    <button id="draw-btn" class="primary big" disabled>🎉 Draw Winner</button>
+  </section>
+</main>
+
+<!-- Winner moment: full-screen, names scrolling on opposite sides (VQS style) -->
+<div id="draw-overlay" class="hidden">
+  <div class="scroll-col left"><div class="scroll-track" id="scroll-left"></div></div>
+  <div class="winner-center">
+    <div id="winner-drum">?</div>
+    <div id="winner-name" class="hidden"></div>
+    <button id="winner-close" class="ghost hidden">close</button>
+  </div>
+  <div class="scroll-col right"><div class="scroll-track" id="scroll-right"></div></div>
+</div>
+
+<footer>
+  <p>Free forever · no data leaves your browser · <a href="https://github.com/" id="repo-link">fork it on GitHub</a></p>
+  <p class="credit">Built by <strong>WebWizardWill</strong> for the streamer fam 💝</p>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>

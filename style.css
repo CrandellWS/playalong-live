@@ -1,0 +1,78 @@
+/* Play-Along Live — candy-bright, streamer-friendly, zero-dependency. */
+:root {
+  --bg: #14051d; --card: #ffffff0a; --line: #ffffff1c;
+  --pink: #ff5fa2; --gold: #ffd166; --text: #f6ecf4; --dim: #f6ecf480;
+}
+* { box-sizing: border-box; margin: 0; }
+body {
+  font: 16px/1.5 system-ui, sans-serif; background: radial-gradient(120% 100% at 50% 0%, #2a0b3d, var(--bg));
+  color: var(--text); min-height: 100vh; display: flex; flex-direction: column;
+}
+header { text-align: center; padding: 40px 16px 12px; }
+h1 { font-size: 2.2rem; letter-spacing: .5px; }
+.accent { color: var(--pink); }
+.tagline { color: var(--dim); margin-top: 6px; }
+main { flex: 1; width: min(680px, 94vw); margin: 0 auto; display: grid; gap: 18px; padding: 18px 0 40px; }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 20px; }
+.card h2 { font-size: 1.05rem; margin-bottom: 12px; color: var(--gold); }
+.row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+select, button {
+  font: inherit; color: inherit; background: #ffffff12; border: 1px solid var(--line);
+  border-radius: 12px; padding: 10px 14px; cursor: pointer;
+}
+select { flex: 1; min-width: 240px; }
+button.primary { background: linear-gradient(135deg, var(--pink), #b3418f); border: none; font-weight: 700; }
+button.primary:disabled { opacity: .4; cursor: default; }
+button.big { font-size: 1.3rem; padding: 16px 28px; width: 100%; }
+button.ghost { background: transparent; }
+.toggle { display: flex; gap: 6px; align-items: center; color: var(--dim); font-size: .9rem; }
+.status { color: #7bffb2; font-size: .85rem; }
+.stats-row { display: flex; gap: 12px; margin: 14px 0; }
+.stat { flex: 1; text-align: center; background: #ffffff08; border-radius: 12px; padding: 10px; }
+.stat-num { font-size: 1.6rem; font-weight: 800; color: var(--gold); }
+.stat-label { font-size: .75rem; color: var(--dim); }
+#roster { list-style: none; max-height: 300px; overflow-y: auto; display: grid; gap: 4px; }
+#roster li { display: flex; justify-content: space-between; padding: 6px 10px; background: #ffffff07; border-radius: 8px; }
+.r-count { color: var(--gold); font-weight: 700; }
+.fineprint { color: var(--dim); font-size: .78rem; margin-top: 12px; }
+.hidden { display: none !important; }
+footer { text-align: center; padding: 18px; color: var(--dim); font-size: .85rem; }
+footer a { color: var(--pink); }
+
+/* ── Winner draw overlay: names scrolling on OPPOSITE sides (VQS style) ── */
+#draw-overlay {
+  position: fixed; inset: 0; background: #14051df2; z-index: 50;
+  display: flex; align-items: stretch; justify-content: space-between;
+}
+.scroll-col { width: 26%; overflow: hidden; position: relative; }
+.scroll-col::before, .scroll-col::after {
+  content: ''; position: absolute; left: 0; right: 0; height: 18vh; z-index: 2; pointer-events: none;
+}
+.scroll-col::before { top: 0; background: linear-gradient(#14051d, transparent); }
+.scroll-col::after { bottom: 0; background: linear-gradient(transparent, #14051d); }
+.scroll-track { display: flex; flex-direction: column; gap: 14px; padding: 10px; }
+.left .scroll-track { animation: scrollUp 14s linear infinite; }
+.right .scroll-track { animation: scrollDown 14s linear infinite; }
+@keyframes scrollUp { from { transform: translateY(0); } to { transform: translateY(-33.33%); } }
+@keyframes scrollDown { from { transform: translateY(-33.33%); } to { transform: translateY(0); } }
+.scroll-name {
+  text-align: center; font-size: 1.25rem; font-weight: 700; color: #ffffff59;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.winner-center { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 22px; }
+#winner-drum { font-size: 2.4rem; font-weight: 800; color: var(--dim); min-height: 1.4em; }
+#winner-name {
+  font-size: clamp(2.2rem, 6vw, 4.2rem); font-weight: 900; text-align: center;
+  background: linear-gradient(135deg, var(--gold), var(--pink));
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+  animation: pop .5s cubic-bezier(.2, 2, .4, 1);
+}
+@keyframes pop { from { transform: scale(.4); opacity: 0; } }
+.confetti {
+  position: fixed; top: -10px; width: 10px; height: 16px; z-index: 60;
+  animation: fall 3s ease-in forwards; border-radius: 2px;
+}
+@keyframes fall {
+  to { transform: translateY(105vh) rotate(720deg); opacity: .2; }
+}
+@media (max-width: 640px) { .scroll-col { width: 18%; } }
