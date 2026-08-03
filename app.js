@@ -146,6 +146,24 @@ function renderRoster() {
   $('draw-btn').disabled = roster.length === 0;
 }
 
+// Copy the roster as plain text — one name per line. Weighted repeats each
+// name by rounds played (paste-ready for wheel-of-names style sites), so
+// streamers can use this page purely as a name feed for their own display.
+async function copyList(weighted) {
+  const lines = [];
+  for (const [uid, n] of state.entries) {
+    const name = state.names.get(uid) || uid.slice(0, 8);
+    for (let i = 0; i < (weighted ? n : 1); i++) lines.push(name);
+  }
+  if (!lines.length) return;
+  try {
+    await navigator.clipboard.writeText(lines.join('\n'));
+    const el = $('copy-done');
+    el.textContent = `copied ${lines.length} ${weighted ? 'entries' : 'names'} ✓`;
+    setTimeout(() => { el.textContent = ''; }, 2500);
+  } catch { alert('Copy blocked by browser — select the list manually.'); }
+}
+
 function resetEntries() {
   if (!confirm('Clear all collected entries for this room?')) return;
   state.seenRounds = new Set();
@@ -227,6 +245,8 @@ $('room-select').addEventListener('change', pickRoom);
 $('room-refresh').addEventListener('click', loadRooms);
 $('track-toggle').addEventListener('click', () => state.collecting ? stopCollecting() : startCollecting());
 $('reset-entries').addEventListener('click', resetEntries);
+$('copy-names').addEventListener('click', () => copyList(false));
+$('copy-weighted').addEventListener('click', () => copyList(true));
 $('draw-btn').addEventListener('click', drawWinner);
 $('winner-close').addEventListener('click', () => $('draw-overlay').classList.add('hidden'));
 loadRooms();

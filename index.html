@@ -34,15 +34,22 @@
       <label class="toggle"><input type="checkbox" id="weighted-toggle" checked> weight by rounds played</label>
       <button id="reset-entries" class="ghost">Reset</button>
     </div>
+    <div class="row" style="margin-top:10px">
+      <button id="copy-names" class="ghost">📋 Copy names</button>
+      <button id="copy-weighted" class="ghost">📋 Copy weighted list</button>
+      <span id="copy-done" class="status"></span>
+    </div>
     <div class="stats-row">
       <div class="stat"><div class="stat-num" id="stat-rounds">0</div><div class="stat-label">rounds seen</div></div>
       <div class="stat"><div class="stat-num" id="stat-players">0</div><div class="stat-label">players</div></div>
       <div class="stat"><div class="stat-num" id="stat-entries">0</div><div class="stat-label">total entries</div></div>
     </div>
     <ul id="roster"></ul>
-    <p class="fineprint">Entries come from MyPrize's public play-along round data — every player in a
-    completed round earns an entry. Public data can't split entries by currency (SC/GC), so this counts
-    participation in any currency.</p>
+    <p class="fineprint"><strong>Heads up:</strong> entries count play-along participation in
+    <strong>any currency (SC, GC, or USD combined)</strong> — verified against MyPrize's public round
+    data, which lists every participant but doesn't say who bet which currency. Every player in a
+    completed round earns one entry. Prefer your own wheel? Use the copy buttons — "weighted" repeats
+    each name by rounds played, paste-ready for any wheel site.</p>
   </section>
 
   <!-- Step 3: the draw -->
