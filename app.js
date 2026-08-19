@@ -572,7 +572,6 @@ async function applyStreamerLink() {
    with the exact place in OBS each one goes. */
 function showStreamLinks(room) {
   const base = roomLink(room);
-  $('url-me').textContent = base;
   $('url-obs').textContent = base + '&obs=1';
   $('url-dock').textContent = base + '&dock=1';
   $('stream-step').classList.remove('hidden');
