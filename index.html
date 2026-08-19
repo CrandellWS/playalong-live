@@ -31,6 +31,42 @@
     <div id="room-preview" class="room-preview hidden"></div>
   </section>
 
+  <!-- On-stream setup: only shown when a streamer opens their own ?r= link -->
+  <section id="stream-step" class="card hidden">
+    <h2>📺 Put it on your stream</h2>
+    <p class="fineprint" style="margin-bottom:12px">
+      Two views, <strong>both added inside OBS</strong> — that's what lets them talk to each other.
+      Keep this page open too if you'd rather run the draw from here.
+    </p>
+    <div class="link-row">
+      <div>
+        <div class="link-label">1 · Overlay <span class="link-where">OBS → Sources → <b>Browser</b></span></div>
+        <code id="url-obs"></code>
+      </div>
+      <button class="ghost" data-copy="url-obs">Copy</button>
+    </div>
+    <div class="link-row">
+      <div>
+        <div class="link-label">2 · Controls <span class="link-where">OBS → Docks → <b>Custom Browser Dock</b></span></div>
+        <code id="url-dock"></code>
+      </div>
+      <button class="ghost" data-copy="url-dock">Copy</button>
+    </div>
+    <div class="link-row">
+      <div>
+        <div class="link-label">Your page <span class="link-where">share this one in chat</span></div>
+        <code id="url-me"></code>
+      </div>
+      <button class="ghost" data-copy="url-me">Copy</button>
+    </div>
+    <p class="fineprint">
+      Draw from the dock (or from this page) and the winner plays out on the overlay.
+      The overlay only mirrors — it never picks its own winner, so the two can never disagree.
+      <strong>Both must be inside OBS</strong>; a dock in a separate browser window won't reach the overlay.
+    </p>
+    <span id="stream-copied" class="status"></span>
+  </section>
+
   <!-- Step 2: entries accumulate from live play-along rounds -->
   <section id="track-step" class="card hidden">
     <h2>2 · Entries <span id="entry-status" class="status"></span></h2>

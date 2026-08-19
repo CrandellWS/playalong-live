@@ -320,6 +320,17 @@ function initDock() {
   document.querySelector('#draw-step h2').textContent = '';
 }
 
+/* The overlay re-reads the control page's saved state whenever it changes, and
+   on a slow tick as a safety net in case a storage event is missed. */
+function mirrorControlTab() {
+  window.addEventListener('storage', (e) => {
+    if (!state.room || e.key !== `pal_${state.room.id}`) return;
+    loadLocal();
+    renderRoster();
+  });
+  setInterval(() => { loadLocal(); renderRoster(); }, 5000);
+}
+
 function initOBS() {
   if (!isOBS()) return;
   document.body.classList.add('obs');
@@ -361,8 +372,15 @@ function drawWinner() {
 function performReveal(winnerName) {
   // Fill both side columns with the roster, shuffled differently, looped for
   // seamless scroll. Left scrolls up, right scrolls down (CSS handles motion).
-  const names = liveRoster().map(r => r.name === '…' ? r.uid.slice(0, 8) : r.name);
-  if (!names.length) names.push(winnerName);
+  // Prefer the live roster; if the window has emptied, fall back to every name
+  // we know so the columns still scroll. A reveal with two names in it looks
+  // broken on stream even when the winner is correct.
+  let names = liveRoster().map(r => r.name === '…' ? r.uid.slice(0, 8) : r.name);
+  if (names.length < 8) {
+    const extra = [...state.names.values()].filter(n => !names.includes(n));
+    names = [...names, ...extra];
+  }
+  if (!names.length) names = [winnerName];
   const fill = (el, list) => {
     const loop = [...list, ...list, ...list];
     el.innerHTML = loop.map(n => `<div class="scroll-name">${escapeHtml(n)}</div>`).join('');
@@ -504,6 +522,8 @@ function renderStreamerCard(room) {
   $('room-step').classList.add('hidden');
   if (isOBS()) {
     document.querySelector('#track-step h2').textContent = `${room.name}'s Giveaway`;
+  } else {
+    showStreamLinks(room);
   }
   $('switch-room').addEventListener('click', () => {
     history.replaceState(null, '', location.pathname);
@@ -536,14 +556,35 @@ async function applyStreamerLink() {
       $('track-step').classList.remove('hidden');
       $('draw-step').classList.remove('hidden');
       renderRoster();
-      // An overlay has nobody to press Start — it collects on its own.
-      if (isOBS()) startCollecting();
+      // The overlay does NOT collect. It mirrors whatever the control page has
+      // saved — two tabs polling independently drift apart, and an overlay that
+      // disagrees with the dock about who is in the draw is worse than useless.
+      if (isOBS()) mirrorControlTab();
       return true;
     }
   }
   // Unknown slug: say so rather than silently showing the generic page.
   $('tagline').textContent = `Couldn't find a room called "${want}" — pick one below.`;
   return false;
+}
+
+/* A streamer should never have to be told what to paste — show all three URLs
+   with the exact place in OBS each one goes. */
+function showStreamLinks(room) {
+  const base = roomLink(room);
+  $('url-me').textContent = base;
+  $('url-obs').textContent = base + '&obs=1';
+  $('url-dock').textContent = base + '&dock=1';
+  $('stream-step').classList.remove('hidden');
+  document.querySelectorAll('[data-copy]').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const txt = $(btn.dataset.copy).textContent;
+      const el = $('stream-copied');
+      try { await navigator.clipboard.writeText(txt); el.textContent = 'copied ✓'; }
+      catch { el.textContent = 'select the link and copy it manually'; }
+      setTimeout(() => { el.textContent = ''; }, 2500);
+    });
+  });
 }
 
 async function copyMyLink() {

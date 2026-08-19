@@ -212,3 +212,17 @@ body.dock .speed-row { margin-top: 10px; }
   color: var(--gold); background: #ffd16614; border: 1px solid var(--gold);
   border-radius: 10px; padding: 8px;
 }
+
+/* On-stream setup panel — a streamer should never have to be told the URLs. */
+.link-row {
+  display: flex; align-items: center; gap: 12px; justify-content: space-between;
+  padding: 10px 0; border-top: 1px solid var(--line); flex-wrap: wrap;
+}
+.link-row:first-of-type { border-top: none; }
+.link-label { font-size: .85rem; font-weight: 700; margin-bottom: 4px; }
+.link-where { font-weight: 400; color: var(--dim); font-size: .78rem; }
+.link-row code {
+  display: block; font-size: .78rem; color: var(--gold); word-break: break-all;
+  background: #ffffff0d; padding: 5px 8px; border-radius: 6px;
+}
+body.obs #stream-step, body.dock #stream-step { display: none; }
