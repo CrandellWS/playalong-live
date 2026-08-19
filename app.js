@@ -575,9 +575,13 @@ async function applyStreamerLink() {
 /* A streamer should never have to be told what to paste — show all three URLs
    with the exact place in OBS each one goes. */
 function showStreamLinks(room) {
+  // Defensive: a cached/mismatched index.html can leave any of these missing,
+  // and a throw here would take the whole page down before it renders.
+  const set = (id, txt) => { const el = $(id); if (el) el.textContent = txt; };
   const base = roomLink(room);
-  $('url-obs').textContent = base + '&obs=1';
-  $('url-dock').textContent = base + '&dock=1';
+  set('url-obs', base + '&obs=1');
+  set('url-dock', base + '&dock=1');
+  if (!$('stream-step')) return;
   $('stream-step').classList.remove('hidden');
   document.querySelectorAll('[data-copy]').forEach(btn => {
     btn.addEventListener('click', async () => {

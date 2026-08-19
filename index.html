@@ -5,7 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Play-Along Live — free MyPrize giveaway picker</title>
 <meta name="description" content="Free play-along giveaway picker for any live MyPrize room. No signup, no setup, no install — pick a room, watch entries roll in, draw a winner.">
-<link rel="stylesheet" href="style.css">
+<!-- ?v= is bumped on every deploy: GitHub Pages will happily serve a NEW
+     index.html beside a CACHED app.js, and that mismatched pair throws. -->
+<link rel="stylesheet" href="style.css?v=202608182328">
 </head>
 <body>
 <header>
@@ -121,6 +123,6 @@
   <p class="credit">Built by <strong>WebWizardWill</strong> for the streamer fam 💝</p>
 </footer>
 
-<script src="app.js"></script>
+<script src="app.js?v=202608182328"></script>
 </body>
 </html>
