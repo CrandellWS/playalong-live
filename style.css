@@ -9,6 +9,7 @@ body {
   color: var(--text); min-height: 100vh; display: flex; flex-direction: column;
 }
 header { text-align: center; padding: 40px 16px 12px; }
+header:has(.streamer:not(.hidden)) { padding-top: 26px; }
 h1 { font-size: 2.2rem; letter-spacing: .5px; }
 .accent { color: var(--pink); }
 .tagline { color: var(--dim); margin-top: 6px; }
@@ -51,8 +52,8 @@ footer a { color: var(--pink); }
 .scroll-col::before { top: 0; background: linear-gradient(#14051d, transparent); }
 .scroll-col::after { bottom: 0; background: linear-gradient(transparent, #14051d); }
 .scroll-track { display: flex; flex-direction: column; gap: 14px; padding: 10px; }
-.left .scroll-track { animation: scrollUp 14s linear infinite; }
-.right .scroll-track { animation: scrollDown 14s linear infinite; }
+.left .scroll-track { animation: scrollUp var(--scroll-dur, 14s) linear infinite; }
+.right .scroll-track { animation: scrollDown var(--scroll-dur, 14s) linear infinite; }
 @keyframes scrollUp { from { transform: translateY(0); } to { transform: translateY(-33.33%); } }
 @keyframes scrollDown { from { transform: translateY(-33.33%); } to { transform: translateY(0); } }
 .scroll-name {
@@ -80,3 +81,134 @@ footer a { color: var(--pink); }
 /* Native dropdown options render on the OS's light panel — force dark/light
    explicitly so it's never white-on-white (Bill, first review). */
 select option { background: #241132; color: #f6ecf4; }
+
+
+/* Spin speed control (Bill, 2026-08-18). The original drum-roll is "slow". */
+.speed-row { display: flex; align-items: center; gap: 12px; margin-top: 14px; flex-wrap: wrap; }
+.speed-label { color: var(--dim); font-size: .9rem; }
+.speed-seg { display: inline-flex; border: 1px solid #ffffff26; border-radius: 8px; overflow: hidden; }
+.speed-opt {
+  background: transparent; border: none; border-radius: 0; padding: 7px 16px;
+  color: var(--dim); font-size: .9rem; font-weight: 600; cursor: pointer;
+}
+.speed-opt + .speed-opt { border-left: 1px solid #ffffff26; }
+.speed-opt:hover { color: #f6ecf4; background: #ffffff0f; }
+.speed-opt[aria-checked="true"] { background: linear-gradient(135deg, var(--pink), #b3418f); color: #fff; }
+.speed-opt:focus-visible { outline: 2px solid var(--pink); outline-offset: -2px; }
+
+/* Reset is a two-step arm rather than a browser confirm() — native modals
+   block the page and steal focus mid-stream (Bill, 2026-08-18). */
+button.ghost.armed { color: #ffb4c8; border-color: var(--pink); background: #f8609022; }
+
+/* Live window: entries older than this stop counting (Bill, 2026-08-18). */
+.inline-select { padding: 5px 8px; font-size: .9rem; width: auto; }
+
+/* Streamer link (?r=slug): the page wears their name and face, not ours.
+   Same instinct as naming the players — the room's own people come first. */
+.streamer { position: relative; border-radius: 20px; overflow: hidden;
+  width: min(680px, 94vw); margin: 0 auto 20px; border: 1px solid var(--line); }
+.streamer.has-shot::before {
+  content: ''; position: absolute; inset: 0; background-image: var(--shot);
+  background-size: cover; background-position: center; filter: blur(18px) saturate(1.3);
+  transform: scale(1.15); opacity: .5;
+}
+.streamer.has-shot::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(180deg, #14051d99, #14051dee);
+}
+.streamer-inner {
+  position: relative; z-index: 1; display: flex; align-items: center; gap: 18px;
+  padding: 20px 22px; text-align: left; flex-wrap: wrap;
+}
+.av-wrap { position: relative; flex: none; }
+.av-wrap img {
+  width: 78px; height: 78px; border-radius: 50%; object-fit: cover; display: block;
+  border: 3px solid var(--pink); box-shadow: 0 0 0 4px #ff5fa233, 0 8px 24px #00000066;
+}
+.av-wrap.is-live::after {
+  content: ''; position: absolute; inset: -3px; border-radius: 50%;
+  border: 3px solid var(--pink); animation: halo 2.4s ease-out infinite;
+}
+@keyframes halo { to { transform: scale(1.35); opacity: 0; } }
+.streamer-who { flex: 1 1 220px; min-width: 0; }
+.streamer-name { font-size: 1.5rem; font-weight: 800; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.verified { color: var(--gold); font-size: 1rem; }
+.live-pill, .off-pill {
+  font-size: .7rem; font-weight: 800; letter-spacing: .08em; padding: 3px 9px;
+  border-radius: 999px; display: inline-flex; align-items: center; gap: 5px;
+}
+.live-pill { background: #ff3b6b; color: #fff; }
+.live-pill i { width: 6px; height: 6px; border-radius: 50%; background: #fff; animation: blip 1.4s infinite; }
+@keyframes blip { 50% { opacity: .25; } }
+.off-pill { background: #ffffff14; color: var(--dim); }
+.streamer-title { color: var(--dim); font-size: .88rem; margin-top: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.chips { display: flex; gap: 8px; margin-top: 9px; flex-wrap: wrap; }
+.chip {
+  font-size: .78rem; color: var(--dim); background: #ffffff12; border: 1px solid var(--line);
+  padding: 4px 10px; border-radius: 999px; display: inline-flex; align-items: center; gap: 6px;
+}
+.chip b { color: var(--text); font-weight: 700; }
+.chip.game img { width: 16px; height: 16px; border-radius: 4px; object-fit: cover; }
+.watch {
+  flex: none; background: linear-gradient(135deg, var(--pink), #b3418f); color: #fff;
+  text-decoration: none; font-weight: 700; padding: 11px 18px; border-radius: 12px;
+  box-shadow: 0 6px 18px #ff5fa23d; white-space: nowrap;
+}
+.watch:hover { filter: brightness(1.1); }
+.switch-room { background: none; border: none; color: var(--dim); text-decoration: underline; cursor: pointer; font: inherit; font-size: .85rem; padding: 0; }
+@media (prefers-reduced-motion: reduce) {
+  .av-wrap.is-live::after, .live-pill i { animation: none; }
+}
+
+/* ---- OBS overlay mode (?obs=1) -----------------------------------------
+   A browser source wants transparency and nothing to click. Strip the page to
+   a live entry counter and the winner moment; the controls live in the
+   streamer's own tab on their other monitor. */
+body.obs {
+  background: transparent;
+  display: block;
+}
+body.obs header,
+body.obs footer,
+body.obs #room-step,
+body.obs #draw-step,
+body.obs .row,
+body.obs .stats-row,
+body.obs .fineprint,
+body.obs #roster { display: none; }
+
+body.obs main { width: min(420px, 92vw); margin: 0; padding: 14px; }
+body.obs .card {
+  background: #14051dcc; border: 1px solid var(--pink); border-radius: 16px;
+  backdrop-filter: blur(6px); padding: 14px 18px;
+}
+body.obs .card h2 { color: var(--pink); font-size: .95rem; margin: 0; }
+body.obs #entry-status { display: none; }
+
+/* The live counter the overlay DOES show. */
+body.obs .obs-count { display: flex; align-items: baseline; gap: 8px; margin-top: 6px; }
+body.obs .obs-count b { font-size: 2rem; color: var(--gold); }
+body.obs .obs-count span { color: var(--dim); font-size: .85rem; }
+.obs-count { display: none; }
+
+/* ---- OBS dock (?dock=1) -------------------------------------------------
+   Controls only, sized for a narrow Custom Browser Dock inside OBS. Pairs with
+   ?obs=1 as the browser source; both must live in OBS so they share a profile
+   and therefore localStorage, which is how the draw reaches the overlay. */
+body.dock { background: var(--bg); }
+body.dock header, body.dock footer, body.dock #room-step,
+body.dock .fineprint, body.dock #roster, body.dock .stats-row { display: none; }
+body.dock main { width: 100%; padding: 10px; gap: 10px; }
+body.dock .card { padding: 12px; border-radius: 12px; }
+body.dock .card h2 { font-size: .8rem; margin-bottom: 8px; }
+body.dock #draw-step h2 { display: none; }
+body.dock .obs-count { display: flex; align-items: baseline; gap: 7px; margin: 2px 0 10px; }
+body.dock .obs-count b { font-size: 1.6rem; color: var(--gold); }
+body.dock .obs-count span { color: var(--dim); font-size: .78rem; }
+body.dock button.big { font-size: 1.05rem; padding: 12px 16px; }
+body.dock .speed-row { margin-top: 10px; }
+.dock-winner {
+  margin-top: 10px; text-align: center; font-size: 1.15rem; font-weight: 800;
+  color: var(--gold); background: #ffd16614; border: 1px solid var(--gold);
+  border-radius: 10px; padding: 8px;
+}

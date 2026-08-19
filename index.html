@@ -9,8 +9,9 @@
 </head>
 <body>
 <header>
-  <h1>🎰 Play-Along <span class="accent">Live</span></h1>
-  <p class="tagline">Free giveaway picker for any live MyPrize room. No signup. No setup. Just pick your room.</p>
+  <div id="streamer-card" class="streamer hidden"></div>
+  <h1 id="title">🎰 Play-Along <span class="accent">Live</span></h1>
+  <p class="tagline" id="tagline">Free giveaway picker for any live MyPrize room. No signup. No setup. Just pick your room.</p>
 </header>
 
 <main>
@@ -23,6 +24,10 @@
       </select>
       <button id="room-refresh" class="ghost" title="Refresh live rooms">↻</button>
     </div>
+    <div class="row" style="margin-top:10px">
+      <button id="copy-link" class="ghost" disabled>🔗 Copy my link</button>
+      <span id="link-done" class="status"></span>
+    </div>
     <div id="room-preview" class="room-preview hidden"></div>
   </section>
 
@@ -31,8 +36,10 @@
     <h2>2 · Entries <span id="entry-status" class="status"></span></h2>
     <div class="row">
       <button id="track-toggle" class="primary">▶ Start collecting entries</button>
-      <label class="toggle"><input type="checkbox" id="weighted-toggle" checked> weight by rounds played</label>
+      <label class="toggle"><input type="checkbox" id="weighted-toggle"> weight by rounds played</label>
       <button id="reset-entries" class="ghost">Reset</button>
+      <label class="toggle">live window <select id="window-select" class="inline-select"></select></label>
+      <span id="window-since" class="status"></span>
     </div>
     <div class="row" style="margin-top:10px">
       <button id="copy-names" class="ghost">📋 Copy names</button>
@@ -44,6 +51,7 @@
       <div class="stat"><div class="stat-num" id="stat-players">0</div><div class="stat-label">players</div></div>
       <div class="stat"><div class="stat-num" id="stat-entries">0</div><div class="stat-label">total entries</div></div>
     </div>
+    <div class="obs-count"><b id="obs-num">0</b><span>in the draw · <i id="obs-window">15 min</i></span></div>
     <ul id="roster"></ul>
     <p class="fineprint"><strong>Heads up:</strong> entries count play-along participation in
     <strong>any currency (SC, GC, or USD combined)</strong> — verified against MyPrize's public round
@@ -56,6 +64,15 @@
   <section id="draw-step" class="card hidden">
     <h2>3 · Draw a winner</h2>
     <button id="draw-btn" class="primary big" disabled>🎉 Draw Winner</button>
+    <div id="dock-winner" class="dock-winner hidden"></div>
+    <div class="speed-row">
+      <span class="speed-label">Spin speed</span>
+      <div class="speed-seg" role="radiogroup" aria-label="Spin speed">
+        <button type="button" class="speed-opt" data-speed="slow" role="radio" aria-checked="false">Slow</button>
+        <button type="button" class="speed-opt" data-speed="normal" role="radio" aria-checked="false">Normal</button>
+        <button type="button" class="speed-opt" data-speed="fast" role="radio" aria-checked="false">Fast</button>
+      </div>
+    </div>
   </section>
 </main>
 
