@@ -361,7 +361,7 @@ function drawWinner() {
     const el = $('dock-winner');
     el.textContent = `🎉 ${winnerName}`;
     el.classList.remove('hidden');
-    setTimeout(() => el.classList.add('hidden'), 15000);
+    setTimeout(() => el.classList.add('hidden'), SPEEDS[getSpeed()].hold + 3000);
     return;
   }
   performReveal(winnerName);
@@ -411,7 +411,7 @@ function performReveal(winnerName) {
       const w = $('winner-name');
       w.textContent = `🎉 ${winnerName} 🎉`;
       w.classList.remove('hidden');
-      if (isOBS()) setTimeout(() => $('draw-overlay').classList.add('hidden'), 12000);
+      if (isOBS()) setTimeout(() => $('draw-overlay').classList.add('hidden'), SPEEDS[getSpeed()].hold);
       else $('winner-close').classList.remove('hidden');
       confettiBurst();
     }
@@ -423,10 +423,14 @@ function performReveal(winnerName) {
 /* ticks = how many names flash by; base+ramp = the slowdown curve, in ms.
    Rough totals: slow ~6.2s, normal ~2.7s, fast ~0.9s. scroll = the side
    columns' loop duration, kept in step so the whole moment reads as one speed. */
+/* `hold` is how long the overlay keeps the winner up before clearing itself.
+   It scales with the speed — a 0.9s drum roll followed by a 12s hold isn't
+   fast, it's a fast spin attached to a slow moment (Bill, 2026-08-18). The
+   floor is set by the confetti, which falls for ~3s. */
 const SPEEDS = {
-  slow:   { ticks: 40, base: 40, ramp: 6,   scroll: '14s' },
-  normal: { ticks: 32, base: 28, ramp: 3.5, scroll: '8s'  },
-  fast:   { ticks: 24, base: 18, ramp: 1.6, scroll: '4s'  },
+  slow:   { ticks: 40, base: 40, ramp: 6,   scroll: '14s', hold: 11000 },
+  normal: { ticks: 32, base: 28, ramp: 3.5, scroll: '8s',  hold: 7000  },
+  fast:   { ticks: 24, base: 18, ramp: 1.6, scroll: '4s',  hold: 4000  },
 };
 const SPEED_KEY = 'pal-spin-speed';
 
